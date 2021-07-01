@@ -1,0 +1,16 @@
+#!/bin/sh
+
+FILE=${1:-swap}
+SIZE=${2:-10G}
+
+sudo touch /$FILE.img
+if command -v qemu-img >/dev/null; then
+    sudo qemu-img create -f qcow2 /$FILE.img $SIZE
+else
+    sudo dd if=/dev/zero of=/$FILE.img bs=$SIZE count=1
+fi
+sudo chown root:root /$FILE.img
+sudo chmod 0600 /$FILE.img
+sudo mkswap -L $FILE /$FILE.img
+sudo swapon LABEL=$FILE
+sudo swapon --summary

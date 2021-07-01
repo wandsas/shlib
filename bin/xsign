@@ -1,0 +1,8 @@
+#!/bin/sh
+
+export XBPS_PASSPHRASE=foobar
+
+printf "\033[0m\033[32==>\033[m Signing compiled pkgs as user\033[1m wandsas\033[m $@\n"
+xbps-rindex --sign-pkg --signedby "wandsas" \
+    --privkey $HOME/.ssh/id_void.pem \
+    $HOME/void-packages/hostdir/binpkgs/*.xbps

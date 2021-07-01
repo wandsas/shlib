@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# a user soundon script for ossv4
+#
+# $Header: soundon.user, 2014/08/31 12:57:40 -tclover Exp $
+# $License: MIT (or 2-clause/new/simplified BSD)      Exp $
+#
+
+grep -q oss /proc/modules || modprobe -a oss_{{audio,midi}loop,hdaudio,midimix}
+lspci | grep -q -i cmi878 && modprobe oss_cmi878x
+
+ossdetect -diu
+ossdevlinks 
+
+# Remapping ossdevlinks links
+if [ -d /dev/oss/oss_cmi878x ]; then
+	pcm=/dev/oss/oss_cmi878x0/pcm1
+	for dsp in /dev/dsp{,_{ac3,in,mmap,multich,out}}
+	do
+		ln -sf $pcm $dsp
+	done
+	vmixctl attach $cmi/pcm1 $cmi/pcm1
+elif [ -d /dev/oss/oss_hdaudio0 ]; then
+	pcm=/dev/oss/oss_hdaudio0/pcm0
+	for dsp in /dev/dsp{,_{ac3,mmap,multich}}
+	do
+		ln -sf $pcm $dsp
+	done
+	ln -sf ${pcm%0}in0  /dev/dsp_in
+	ln -sf ${pcm%0}out0 /dev/dsp_out
+	vmixctl attach $pcm ${pcm%0}in0
+fi
+
+unset pcm
+
+#
+# vim:fenc=utf-8:ft=sh:ci:pi:sts=0:sw=2:ts=2:
+#

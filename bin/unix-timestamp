@@ -1,0 +1,5 @@
+#!/bin/sh
+
+printf '%s\n' "Now: $(date)"
+printf '%s\n' "Now: $(date +%s)"
+

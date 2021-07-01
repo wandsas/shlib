@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# @FUNCION: simple xev key code
+#
+function xev-key-code {
+	xev | grep -A2 --line-buffered '^KeyRelease' | \
+	sed -nre '/keycode /s/^.*keycode ([0-9]*).* (.*, (.*)).*$/\1 \2/p'
+}

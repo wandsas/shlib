@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# add/remove loop back devices
+
+for i in $(seq ${2:-16} ${3:-32}); do
+  case $1 in
+    -d|--del)
+      rm -f /dev/loop$i;;
+    -a|--add)
+	    if [ ! -f /dev/lopp$i ]; then
+	      mknod -m0660 /dev/loop$i b 7 $i
+	   	  chown root:disk /dev/loop$i
+	    fi;;
+  esac
+done
+
+# vim:fenc=utf-8:ft=sh:ts=2:sts=0:sw=2:et:ai:ci:pi:

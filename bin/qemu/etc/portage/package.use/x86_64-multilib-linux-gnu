@@ -1,0 +1,286 @@
+app-admin/collectd contrib -perl xfs
+app-crypt/pinentry gnome-keyring
+app-doc/doxygen dot
+app-editors/vim python_single_target_python2_7 -python_single_target_python3_5
+app-emulation/docker apparmor btrfs overlay
+app-emulation/libvirt lvm pcap virt-network
+app-emulation/qemu smartcard ssh tls vhost-net vde virtfs vte xfs
+app-emulation/runc apparmor
+app-emulation/vmware-modules -vsock -vmci
+app-emulation/vmware-workstation cups ovftool
+app-emulation/vmware-tools vmware_guest_freebsd vmware_guest_linux
+app-emulation/xen efi
+app-emulation/xen-tools custom-cflags hvm pygrub -qemu -qemu-traditional screen system-qemu system-seabios
+app-eselect/eselect-php fpm apache2
+app-office/libreoffice jemalloc
+app-portage/layman sync-plugin-portage -python_targets_python2_7 squashfs subversion
+app-shell/zsh doc
+app-text/asciidoc python_single_target_python2_7
+app-text/docbook-sgml-utils jadetex
+app-text/evince xps
+dev-db/mariadb embedded extraengine innodb-lz4 innodb-lzo jamalloc odbc sphinx
+dev-db/mysql embedded extraengine jemalloc
+dev-db/postgresql uuid
+dev-db/sqlite secure-delete
+dev-lang/perl doc
+dev-lang/php apache2 bcmath cgi flatfile fpm gmp inifile intl mhash mysql mysqli odbc pcntl pdo sysvipc vpx wddx xmlreader xmlrpc xmlwriter xslt
+dev-lang/python doc
+dev-lang/ruby -jemalloc
+dev-libs/DirectFB -egl -gles2
+dev-libs/apr-util mysql
+dev-libs/efl -drm -egl fribidi jp2k physics sound xim -gles system-lz4 -wayland
+dev-libs/fcgi html
+dev-libs/fribidi abi_x86_32
+dev-libs/gmime smime
+media-libs/libbluray aacs utils
+dev-libs/libpcre2 jit
+dev-libs/libunistring abi_x86_32
+dev-libs/nss utils
+dev-libs/xmlsec nss
+dev-util/cmake doc
+dev-util/lv2-c++-tools doc
+dev-vcs/git subversion
+dev-vcs/subversion -dso
+mail-client/mutt gpg imap pop nntp notmuch sidebar smime smtp
+media-fonts/unifont utils
+media-gfx/imagemagick corefonts hdri
+media-gfx/ufraw contrast gimp
+media-libs/aubio doc examples
+media-libs/elementary -wayland
+media-libs/freetype -cleartype_hinting
+media-libs/gegl raw
+media-libs/gexiv2 introspection
+media-libs/libcanberra -sound
+media-libs/libmypaint gegl
+media-libs/libpng apng
+media-libs/lv2 plugins
+media-libs/mesa gbm openmax vulkan xa
+media-libs/libvpx postproc
+media-libs/t1lib doc
+media-plugins/calf lv2
+media-plugins/tap-plugins doc
+media-sound/ardour lv2
+media-sound/jack-audio-connection-kit classic debug ieee1394 readline libsamplerate sndfile alsa zalsa
+media-sound/mpd faad wildmidi
+media-sound/ncmpcpp taglib visualizer
+media-sound/patchage jack-session
+media-sound/shntool mac
+media-video/ffmpeg bluray cdio faac frei0r schroedinger vaapi vpx x265
+media-video/mpv bluray bs2b dvdnav encode vaapi
+media-video/x264-encoder avs custom-cflags
+net-analyzer/check_mk apache_status livestatus logwatch smart wato
+net-analyzer/fping suid
+net-analyzer/monitoring-plugins mysql postgres
+net-analyzer/nagios-core apache2 lighttpd
+net-analyzer/nagios-plugins mysql nagios-dns nagios-ping ssh
+net-analyzer/nagvis apache2 automap
+net-analyzer/net-snmp mysql netlink pci
+net-analyzer/pnp4nagios apache2
+net-analyzer/rrdtool graph rrdcgi
+net-dialup/ppp eap-tls
+net-dns/dnsmasq auth-dns conntrack dhcp-tools dnssec script tftp
+net-firewall/ipset -modules
+net-libs/gnutls pkcs11 openssl
+net-libs/neon gnutls libproxy pkcs11
+net-mail/mailutils bidi mysql servers
+net-mail/notmuch mutt
+net-misc/curl curl_ssl_libressl -curl_ssl_openssl http2 ssh
+net-misc/openssh sctp
+net-misc/openvswitch -modules
+net-misc/tigervnc dr3 server
+net-misc/tor nat-pmp tor-hardening transparent-proxy
+net-nntp/nzbget parcheck
+net-nntp/slrn uudeview
+net-nntp/tin gpg mime spell
+net-p2p/rtorrent daemon
+=net-print/cnijfilter-3.70-r2 cups gtk net usb servicetools canon_printers_ip100
+net-print/cups ppds
+net-print/gutenprint foomaticdb gimp ppds
+net-wireless/hostapd madwifi
+net-wireless/wpa_supplicant eap-sim gnutls
+sys-apps/busybox mdev -pam
+sys-apps/ipmitool openipmi
+sys-apps/lm_sensors sensord
+sys-apps/openrc -netifrc
+sys-auth/pambase mktemp pam_ssh
+sys-cluster/gearmand sqlite
+sys-devel/gcc:5.4.0 abi_x86_32 -awt fortran gcj objc objc++ objc-gc
+sys-devel/gcc:7.3.0 abi_x86_32 -awt fortran objc objc++
+sys-devel/llvm gold
+sys-fs/aufs-standalone -pax_kernel
+sys-fs/aufs-util fhsm kernel-builtin
+sys-fs/cryptsetup -gcrypt openssl
+sys-fs/eudev gudev
+sys-kernel/mkinitramfs-ll bash btrfs dm-crypt dmraid jfs mdadm reiserfs squashfs xfs zram zsh
+sys-devel/binutils multitarget
+sys-libs/zlib minizip
+virtual/mysql embedded
+virtual/linux-sources firmware
+virtual/udev gudev
+www-apache/mod_python python_single_target_python2_7
+www-client/firefox custom-cflags custom-optimization -gmp-autoupdate jit system-cairo system-harfbuzz system-icu system-jpeg system-libevent system-libvpx system-sqlite -wifi
+web-servers/apache apache2_modules_cache_disk apache2_modules_dir apache2_modules_http2 apache2_modules_macro apache2_modules_ratelimit apache2_modules_remoteip apache2_modules_reqtimeout apache2_modules_unixd apache2_mpms_worker
+www-servers/lighttpd doc -kerberos memcached mysql php rrdtool webdav
+www-servers/nginx http http-cache http2
+x11-libs/cairo xcb
+x11-libs/libdrm libkms
+x11-libs/libfm -automount
+x11-libs/libxcb xkb
+x11-misc/spacefm -gtk2 gtk3 -video-thumbnails
+x11-misc/tint2 battery tint2conf
+x11-terms/rxvt-unicode 256-color blink
+x11-themes/ardoise-xcursor-theme minimal
+x11-themes/e-gtk-theme minimal openbox
+x11-themes/efenniht minimal
+x11-wm/enlightenment -wayland -enlightenment_modules_connman
+x11-wm/icewm bidi
+#
+#-*-multilib-dependencies-*-
+#
+app-accessibility/at-spi2-atk abi_x86_32
+app-accessibility/at-spi2-core abi_x86_32
+app-arch/bzip2 abi_x86_32
+app-arch/xz-utils abi_x86_32
+app-crypt/mit-krb5 abi_x86_32 -openldap -pkinit
+app-crypt/p11-kit abi_x86_32
+dev-lang/lua abi_x86_32
+dev-libs/atk abi_x86_32
+dev-libs/dbus-glib abi_x86_32
+dev-libs/expat abi_x86_32
+dev-libs/glib abi_x86_32
+dev-libs/gmp abi_x86_32
+dev-libs/icu abi_x86_32
+dev-libs/libIDL abi_x86_32
+dev-libs/libcroco abi_x86_32
+dev-libs/libev abi_x86_32
+dev-libs/libffi abi_x86_32
+dev-libs/libgcrypt abi_x86_32
+dev-libs/libglvnd abi_x86_32
+dev-libs/libgpg-error abi_x86_32
+dev-libs/libgudev abi_x86_32
+dev-libs/libpcre abi_x86_32
+dev-libs/libpthread-stubs abi_x86_32
+dev-libs/libressl abi_x86_32
+dev-libs/libtasn1 abi_x86_32
+dev-libs/libverto abi_x86_32
+dev-libs/libxml2 abi_x86_32
+dev-libs/lzo abi_x86_32
+dev-libs/nettle abi_x86_32
+dev-libs/openssl abi_x86_32
+dev-libs/popt abi_x86_32
+dev-libs/wayland abi_x86_32
+dev-util/pkgconfig abi_x86_32
+gnome-base/libglade abi_x86_32
+gnome-base/librsvg abi_x86_32
+media-gfx/graphite2 abi_x86_32
+media-libs/fontconfig abi_x86_32
+media-libs/freeglut abi_x86_32
+media-libs/freetype abi_x86_32 infinality
+media-libs/glew abi_x86_32
+media-libs/glu abi_x86_32
+media-libs/harfbuzz abi_x86_32
+media-libs/imlib abi_x86_32
+media-libs/jasper abi_x86_32
+media-libs/jbigkit abi_x86_32
+media-libs/libjpeg-turbo abi_x86_32
+media-libs/libomxil-bellagio abi_x86_32
+media-libs/libpng abi_x86_32
+media-libs/libepoxy abi_x86_32
+media-libs/mesa abi_x86_32
+media-libs/tiff abi_x86_32
+net-dns/libidn abi_x86_32
+net-dns/libidn2 abi_x86_32
+net-libs/gnutls abi_x86_32
+net-nds/openldap abi_x86_32
+net-print/cups abi_x86_32
+sys-apps/attr abi_x86_32
+sys-apps/dbus abi_x86_32
+sys-apps/keyutils abi_x86_32
+sys-apps/util-linux abi_x86_32
+sys-devel/gettext abi_x86_32
+sys-devel/llvm abi_x86_32
+sys-fs/eudev abi_x86_32
+sys-libs/binutils-libs abi_x86_32
+sys-libs/e2fsprogs-libs abi_x86_32
+sys-libs/gpm abi_x86_32
+sys-libs/ncurses abi_x86_32
+sys-libs/readline abi_x86_32
+sys-libs/zlib abi_x86_32
+virtual/glu abi_x86_32
+virtual/jpeg abi_x86_32
+virtual/krb5 abi_x86_32
+virtual/libffi abi_x86_32
+virtual/libgudev abi_x86_32
+virtual/libiconv abi_x86_32
+virtual/libintl abi_x86_32
+virtual/libudev abi_x86_32
+virtual/opengl abi_x86_32
+virtual/pkgconfig abi_x86_32
+virtual/udev abi_x86_32
+x11-libs/cairo abi_x86_32
+x11-libs/gdk-pixbuf abi_x86_32
+x11-libs/gtk+ abi_x86_32
+x11-libs/libICE abi_x86_32
+x11-libs/libSM abi_x86_32
+x11-libs/libX11 abi_x86_32
+x11-libs/libXScrnSaver abi_x86_32
+x11-libs/libXau abi_x86_32
+x11-libs/libXaw abi_x86_32
+x11-libs/libXcomposite abi_x86_32
+x11-libs/libXcursor abi_x86_32
+x11-libs/libXdamage abi_x86_32
+x11-libs/libXdmcp abi_x86_32
+x11-libs/libXext abi_x86_32
+x11-libs/libXfixes abi_x86_32
+x11-libs/libXft abi_x86_32
+x11-libs/libXi abi_x86_32
+x11-libs/libXinerama abi_x86_32
+x11-libs/libXmu abi_x86_32
+x11-libs/libXp abi_x86_32
+x11-libs/libXpm abi_x86_32
+x11-libs/libXrandr abi_x86_32
+x11-libs/libXrender abi_x86_32
+x11-libs/libXt abi_x86_32
+x11-libs/libXtst abi_x86_32
+x11-libs/libXv abi_x86_32
+x11-libs/libXvMC abi_x86_32
+x11-libs/libXxf86dga abi_x86_32
+x11-libs/libXxf86vm abi_x86_32
+x11-libs/libdrm abi_x86_32
+x11-libs/libnotify abi_x86_32
+x11-libs/libpciaccess abi_x86_32
+x11-libs/libva abi_x86_32
+x11-libs/libva-intel-driver abi_x86_32
+x11-libs/libva-vdpau-driver abi_x86_32
+x11-libs/libvdpau abi_x86_32
+x11-libs/libxcb abi_x86_32
+x11-libs/libxkbcommon abi_x86_32
+x11-libs/libxshmfence abi_x86_32
+x11-libs/pango abi_x86_32
+x11-libs/pangox-compat abi_x86_32
+x11-libs/pixman abi_x86_32
+x11-proto/compositeproto abi_x86_32
+x11-proto/damageproto abi_x86_32
+x11-proto/dri2proto abi_x86_32
+x11-proto/dri3proto abi_x86_32
+x11-proto/fixesproto abi_x86_32
+x11-proto/glproto abi_x86_32
+x11-proto/inputproto abi_x86_32
+x11-proto/kbproto abi_x86_32
+x11-proto/presentproto abi_x86_32
+x11-proto/printproto abi_x86_32
+x11-proto/randrproto abi_x86_32
+x11-proto/recordproto abi_x86_32
+x11-proto/renderproto abi_x86_32
+x11-proto/scrnsaverproto abi_x86_32
+x11-proto/videoproto abi_x86_32
+x11-base/xcb-proto abi_x86_32
+x11-proto/xextproto abi_x86_32
+x11-proto/xf86bigfontproto abi_x86_32
+x11-proto/xf86driproto abi_x86_32
+x11-proto/xf86vidmodeproto abi_x86_32
+x11-proto/xineramaproto abi_x86_32
+x11-proto/xproto abi_x86_32
+x11-themes/gtk-engines abi_x86_32
+
+

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+DEV=${1}
+LABEL=${2:-wandsas}
+
+sudo mkfs.ext4 -O ^has_journal -E stride=2,stripe-width=1024 -b 4096 $DEV
+sudo e2label $DEV $LABEL
+sudo e2fsck -f $DEV

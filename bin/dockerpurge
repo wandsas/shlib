@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Remove exited container, when some exist
+[ -n "$(docker ps -a -q)" ] && docker rm -f $(docker ps -a -q)
+docker ps -q -f status=exited | xargs --no-run-if-empty docker rm
+
+# Delete all dangling (unused) images
+docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi

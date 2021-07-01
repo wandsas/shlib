@@ -1,0 +1,71 @@
+#
+# $Header: ~/.aliasrc, 2014/09/30 -tclover Exp $
+#
+
+alias ipr='~/bin/ipr'
+alias lbd='~/bin/lbd'
+alias xtr='~/bin/xtr'
+
+alias pu=pushd
+alias po=popd
+
+alias ls='ls --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+alias lsd='ls -d *$@*'
+alias lad='ls -Ad .*$@*'
+alias lsa='ls -Ad .*$@*'
+alias lsn='ls -hrtl *$@* | tail'
+alias lso='ls -hrtl *$@* | head'
+alias lsl='ls -Alh'
+alias halt='sudo /sbin/halt'
+alias root='sudo /sbin/reboot'
+alias cl=clear
+alias md=mkdir
+alias rd=rmdir
+alias hy=history
+alias mo=more
+alias le=less
+alias gr=grep
+alias hl='history | less'
+alias ct='tar -cvpf'
+alias xt='tar -xvpf'
+
+alias eqf='equery f'
+alias equ='equery u'
+alias eqh='equery h'
+alias eqa='equery a'
+alias eqb='equery b'
+alias eql='equery l'
+alias eqd='equery d'
+alias eqg='equery g'
+alias eqc='equery c'
+alias eqk='equery k'
+alias eqm='equery m'
+
+alias qa=qatom
+alias qc=qcache
+alias qd=qdepends
+alias qk=qcheck
+alias qf=qfile
+alias qg=qgrep
+alias ql=qlist
+alias qo=qlop
+alias qp=qpkg
+alias qm=qmerge
+alias qs=qsearch
+alias qz=qsize
+alias qt=qtbz2
+alias qu=quse
+alias qx=qxpak
+
+alias yd=youtube-dl
+alias yg=you-get
+
+#
+# vim:fenc=utf-8:ft=sh:ci:pi:sts=0:sw=2:ts=2:
+#

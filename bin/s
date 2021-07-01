@@ -1,0 +1,30 @@
+#!/bin/sh
+# s [-w sec] [cmd] [service...] - runit service helper
+
+: ${SVCMD:=$(command -v sv)}
+
+while getopts "u:w:v" opt; do
+	case "$opt" in
+	w) export SVWAIT="$OPTARG" ;;
+	esac
+done
+shift $(($OPTIND - 1))
+
+case "$(id -u)" in
+0)
+	: ${ETCSVDIR:="/etc/sv"}
+	: ${SVDIR:="/var/service"}
+	;;
+1000)
+	: ${ETCSVDIR:="/home/wandsas/sv"}
+	: ${SVDIR:="/home/wandsas/service /home/wandsas/service.x"}
+	;;
+esac
+
+cmd=$1
+case "${cmd:=ls}" in
+	l|ls|list) set -- s $(for x in ${SVDIR}; do echo $x/*; done) ;;
+	x|e|X|E|D|T|c|u|d|o|t|p|h|a|i|k|q|1|2|s|r|f|restart) ;;
+	*) set -- s ${cmd} ;;
+esac
+SVDIR="${ETCSVDIR}" "${SVCMD}" "$@"

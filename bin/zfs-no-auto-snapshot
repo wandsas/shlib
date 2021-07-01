@@ -1,0 +1,3 @@
+#!/bin/sh
+sudo zfs set "com.sun:auto-snapshot=false" ${1}
+zfs get com.sun:auto-snapshot ${1}
