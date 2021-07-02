@@ -42,7 +42,5 @@ http {
   }
 }
 EOF
-ng
-la
-inx -p /tmp/.nginx-here.$$ -c cfg
+nginx -p /tmp/.nginx-here.$$ -c cfg
 rm -r /tmp/.nginx-here.$$
