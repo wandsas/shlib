@@ -1,8 +1,13 @@
 #!/bin/sh
 
+. ~/lib/stdout-log.sh
+
+me=$(basename ${0})
+
 export XBPS_PASSPHRASE=foobar
 
-printf "\033[0m\033[32==>\033[m Signing compiled pkgs as user\033[1m wandsas\033[m $@\n"
+begin "Signing new compiled xbps packages."
 xbps-rindex --sign-pkg --signedby "wandsas" \
     --privkey $HOME/.ssh/id_void.pem \
     $HOME/void-packages/hostdir/binpkgs/*.xbps
+end "Finished signing xbps packages succmessfully."

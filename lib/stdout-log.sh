@@ -18,11 +18,12 @@ info () {
 }
 
 msg () {
-  printf "${bold}${yellow}==>${reset} ${bold}${@}${reset}\n" >&2
+  printf "${bold}${yellow}=>${reset} ${bold}${@}${reset}\n" >&2
 }
 
 success () {
-  printf "${bold}${green}[${me}:ok]:${reset} ${bold}${@}${reset}\n" >&2
+  printf "${bold}${green} * ${reset} ${bold}${@}${reset} ${blue}[${reset}${green} ok
+  ${reset}${blue}]${reset}\n" >&2
 }
 
 begin () {
@@ -30,7 +31,7 @@ begin () {
 }
 
 end () {
-  printf "${bold}${blue}END${reset} ${bold}${@}${reset}\n" >&2
+  printf "${bold}${blue}[END]${reset} ${bold}${@}${reset}\n" >&2
 }
 
 warn () {
