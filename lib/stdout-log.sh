@@ -46,3 +46,4 @@ error () {
 die () {
     local ret="$?"; error "$@"; exit "$ret"
 }
+

@@ -1,4 +1,4 @@
-#!/bin/sh
+# ~/lib/path.sh
 
 # Append element at the end of the path
 appendpath () {
@@ -10,7 +10,6 @@ appendpath () {
     esac
 }
 
-
 # Prepend element before the rest of the path
 prependpath () {
   case ":$PATH:" in
@@ -18,7 +17,6 @@ prependpath () {
            *) PATH="$1${PATH:+:$PATH}";;
   esac
 }
-
 
 # Red Hat path helper function
 pathmunge () {
@@ -31,7 +29,6 @@ pathmunge () {
         fi
     fi
 }
-
 
 # Remove element from PATH
 pathremove () {
