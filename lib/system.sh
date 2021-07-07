@@ -1,33 +1,33 @@
 #!/bin/sh
 
 is_darwin () {
-    [[ `uname -s` == Darwin ]]
+  [ `uname -s` == Darwin ]
 }
 
 is_linux () {
-	[[ `uname -s` == Linux ]]
+	[ `uname -s` == Linux ]
 }
 
 is_freebsd () {
-	[[ `uname -s` == FreeBSD ]]
+	[ `uname -s` == FreeBSD ]
 }
 
 is_openbsd () {
-	[[ `uname -s` == OpenBSD ]]
+	[ `uname -s` == OpenBSD ]
 }
 
 is_debian () {
-	[[ -f /etc/debian_release ]]
+	[ -f /etc/debian_version ]
 }
 
 is_gentoo () {
-	[[ -f /etc/gentoo_release ]]
+	[ -f /etc/gentoo_release ]
 }
 
 is_alpine () {
-    [[ -f /etc/alpine-release ]]
+  [ -f /etc/alpine-release ]
 }
 
 is_void () {
-    [[ -d /etc/xbps.d ]]
+  [ -d /etc/xbps.d ]
 }
