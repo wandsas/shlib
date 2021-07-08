@@ -1,7 +1,7 @@
 # ~/lib/path.sh
 
 # Append element at the end of the path
-appendpath () {
+append_path () {
     case ":$PATH:" in
         *:"$1":*)
             ;;
@@ -11,7 +11,7 @@ appendpath () {
 }
 
 # Prepend element before the rest of the path
-prependpath () {
+prepend_path () {
   case ":$PATH:" in
     *":$1:"*) ;;
            *) PATH="$1${PATH:+:$PATH}";;
@@ -31,7 +31,7 @@ pathmunge () {
 }
 
 # Remove element from PATH
-pathremove () {
+path_remove () {
     if [[ -n "$ZSH_VERSION" ]]; then
 	    path=(${path#$1})
 	else
@@ -44,12 +44,18 @@ relative2absolut () {
   echo "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
 }
 
+blue="\033[0;94m"
+#magenta="\033[0;95m"
+#cyan="\033[0;96m"
+bold="\033[1m"
+#underline="\033[4m"
+reset="\033[m"
 # print directories in $PATH, one per line
 print_path () {
     local -a dirs
     IFS=: read -ra dirs <<< "$PATH"
     for dir in "${dirs[@]}"; do
-        printf '%s\n' "$dir"
+        printf '\033[0;94m\033[1m=>\033[m %s\n' "$dir"
     done
 }
 
