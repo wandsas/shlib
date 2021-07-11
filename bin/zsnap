@@ -1,0 +1,16 @@
+#!/bin/sh
+if [ $# -le 1 ]; then
+  zfs get "com.sun:auto-snapshot" ${1:-zroot}
+elif [ $# -eq 2 ]; then
+  
+  case "${2}" in
+    true)
+      sudo zfs set "com.sun:auto-snapshot=true" ${1}
+      ;;
+    false)
+      sudo zfs set "com.sun:auto-snapshot=false" ${1}
+      ;;
+    *)
+      printf "Usage: zsnap <volume-to-snap> <true|false>\"
+      ;;
+fi
