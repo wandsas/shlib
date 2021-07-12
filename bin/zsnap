@@ -10,7 +10,6 @@ elif [ $# -eq 2 ]; then
     false)
       sudo zfs set "com.sun:auto-snapshot=false" ${1}
       ;;
-    *)
-      printf "Usage: zsnap <volume-to-snap> <true|false>\"
-      ;;
+  esac
+  zfs get "com.sun:auto-snapshot" ${1:-zroot}
 fi
