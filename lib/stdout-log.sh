@@ -1,49 +1,25 @@
 # ~/lib/stdout-log.sh
 
-### Standard logging utility functions ###
-
-#black="\033[0;90m"
-red="\033[0;91m"
-green="\033[0;92m"
-yellow="\033[0;93m"
-blue="\033[0;94m"
-#magenta="\033[0;95m"
-#cyan="\033[0;96m"
-bold="\033[1m"
-#underline="\033[4m"
-reset="\033[m"
+msg () {
+    # bold/yellow
+    printf "\033[1m\033[93m=>\033[m $@\n"
+}
 
 info () {
-  printf "${bold}${yellow}INFO:${reset} ${bold}${@}${reset}\n" >&2
-}
-
-msg () {
-  printf "${bold}${yellow}=>${reset} ${bold}${@}${reset}\n" >&2
-}
-
-success () {
-  printf "${bold}${green} * ${reset} ${bold}${@}${reset} ${blue}[${reset}${green} ok
-  ${reset}${blue}]${reset}\n" >&2
-}
-
-begin () {
-  printf "${bold}${blue}[BEGIN]${reset} ${bold}${@}${reset}\n" >&2
-}
-
-end () {
-  printf "${bold}${blue}[END]${reset} ${bold}${@}${reset}\n" >&2
+    # bold/cyan
+    printf "\033[1m\033[96mINFO:\033[m $@\n"
 }
 
 warn () {
-	printf "${yellow}WARN:${reset} ${bold}${@}${reset}\n" >&2
+    # bold/cyan
+    printf "\033[1m\033[96mWARNING:\033[m $@\n"
 }
 
 error () {
-	printf "${red}ERROR:${reset} ${bold}${@}${reset}\n" >&2
+    # bold/red
+    printf "\033[1m\033[31mERROR:\033[m $@\n"
 }
 
-# @Exit after error
 die () {
     local ret="$?"; error "$@"; exit "$ret"
 }
-
