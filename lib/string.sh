@@ -1,20 +1,13 @@
 # ~/lib/string.sh
 
-### String/Parser functions ###
-
+# Return the length of a string.
 strlen () {
     local length=$(echo "$1" | wc -c | sed -e 's/ *//')
     echo "$(expr $length - 1)"
 }
 
-string_in_file () {
-	case "$(cat $2)" in
-		*$1*) return 0;;
-		   *) return 1;;
-	esac
-}
-
-string_in_string () {
+# Check if first string is substring of the second one.
+substring () {
 	case "$2" in
 		*$1*) return 0;;
 		   *) return 1;;

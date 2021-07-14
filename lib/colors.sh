@@ -1,10 +1,9 @@
 # ~/lib/colors.sh
-#
-# GREEN: Info, Success
-# YELLOW: Description
+
+# YELLOW: Info, Success
 # BLUE: Warning
-# CYAN: Questions
 # RED: Errors
+# MAGENTA: Questions
 
 # ansi colors
 black="\033[0;90m"
