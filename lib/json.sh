@@ -1,7 +1,6 @@
-#!/bin/sh
+# ~/lib/json.sh
 
 # Get json value by key
-#
-function get_value {
+get_value () {
   echo "$1" | jq ".$2"
 }

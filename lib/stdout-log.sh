@@ -10,9 +10,9 @@ info () {
     printf "\033[1m\033[93mINFO:\033[m %s\n" "$*"
 }
 
-question () {
-    # bold/magenta
-    printf "\033[1m\033[95mQuestion:\033[m %s\n" "$*"
+warning () {
+    # bold/orange
+    printf "\033[1m\033[94mWARNING:\033[m %s\n" "$*"
 }
 
 error () {

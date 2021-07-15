@@ -6,8 +6,8 @@ me=$(basename ${0})
 
 export XBPS_PASSPHRASE=foobar
 
-begin "Signing new compiled xbps packages."
+msg "$me: Singing newest xbps packages."
 xbps-rindex --sign-pkg --signedby "wandsas" \
     --privkey $HOME/.ssh/id_void.pem \
     $HOME/void-packages/hostdir/binpkgs/*.xbps
-end "Finished signing xbps packages succmessfully."
+msg "$me: Finished, bye."
