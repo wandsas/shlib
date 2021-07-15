@@ -14,14 +14,17 @@ substring () {
 	esac
 }
 
+# Convert all chars to upper case.
 upper () {
   tr '[:lower:]' '[:upper:]' <<< "$@"
 }
 
+# Convert all chars to lower case.
 lower () {
   tr '[:upper:]' '[:lower:]' <<< "$@"
 }
 
+# Remove all leading whitespace.
 trim () {
   sed -r 's/^\s*(\S)|(\S*)\s*$/\1\2/g' <<< "$@"
 }

@@ -1,19 +1,19 @@
-#!/bin/sh
+# ~/lib/system.sh
 
 is_darwin () {
-  [ `uname -s` == Darwin ]
+  [ `uname -s` == "Darwin" ]
 }
 
 is_linux () {
-	[ `uname -s` == Linux ]
+	[ `uname -s` == "Linux" ]
 }
 
 is_freebsd () {
-	[ `uname -s` == FreeBSD ]
+	[ `uname -s` == "FreeBSD" ]
 }
 
 is_openbsd () {
-	[ `uname -s` == OpenBSD ]
+	[ `uname -s` == "OpenBSD" ]
 }
 
 is_debian () {

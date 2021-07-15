@@ -43,4 +43,3 @@ while (<>) {
   s/$to_trim$// if $opts{trailing};
   print;
 }
-

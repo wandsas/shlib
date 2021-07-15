@@ -1,5 +1,5 @@
 #!/bin/sh
-# Filename:      sh-lib
+# Filename:      grml-shlib.sh
 # Purpose:       Shellscript library
 # Authors:       grml-team (grml.org), (c) Michael Gebetsroither <gebi@grml.org>
 # Bug-Reports:   see http://grml.org/bugs/

@@ -1,8 +1,6 @@
 # ~/lib/shell.sh
 
-### Shell Utility functions ###
-
-# @Test if we are running an interactive session
+# Are running an interactive session?
 is_interactive () {
 	case "${-}" in
 	  *i*) ;;
@@ -10,17 +8,17 @@ is_interactive () {
 	esac
 }
 
-# @Test if we are running a login shell
+# Are we running a login shell?
 is_login_shell () {
-  [ "$SHLVL" = 1 ]
+  [ "${SHLVL}" = 1 ]
 }
 
-# @Test if we are running a zsh shell
+# Are we running a zsh shell?
 is_zsh () {
-	[ -n "$ZSH_VERSION" ]
+	[ "${ZSH_VERSION}" ]
 }
 
-# @Test if we are running a bash shell
+# Are we running a bash shell?
 is_bash () {
-  [ -n $BASH_VERSION ]
+  [ "${BASH_VERSION}" ]
 }

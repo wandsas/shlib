@@ -1,11 +1,13 @@
-#!/bin/sh
+# ~/lib/tmux.sh
 
+# Get current tmux session.
 tmux-current-session () {
     if [ "$TMUX" ]; then
         tmux display-message -pF '#{client_session}'
     fi
 }
 
+# Do we have a running system?
 tmux-has-session () {
     tmux has-session -t "$1" 2>/dev/null
 }
@@ -17,6 +19,7 @@ tmux-check-session-var () {
     fi
 }
 
+# Create new tmux session, or return existing session if it exists.
 tmux-new-session () {
     if [ -z "$tmux_session" ]; then
         tmux_session="$1"
@@ -39,11 +42,13 @@ tmux-new-session () {
     tmux new-session -d -s "$tmux_session"
 }
 
+# Create new tmux window.
 tmux_new_window () {
     tmux-check-session-var
     tmux new-window -t "$tmux_session" "$@"
 }
 
+# Attach tmux session.
 tmux-attach () {
     tmux attach-session -t "$tmux_session"
 }
@@ -52,12 +57,14 @@ tmux-detach () {
     tmux detach-client
 }
 
+# Kill current tmux session.
 tmux-kill-session () {
     if [ -n "$TMUX" ]; then
         tmux kill-session -t $(tmux display-message -pF '#{client_session}')
     fi
 }
 
+# Find all tmux sessions and kill them.
 tmux-kill-all-sessions () {
     tmux list-sessions | awk -F: '{print $1}' | xargs -n 1 tmux kill-session -t
 }

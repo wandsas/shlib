@@ -1,6 +1,6 @@
 # ~/lib/path.sh
 
-# Append element at the end of the path
+# Append element at the end of the path.
 append_path () {
     case ":$PATH:" in
         *:"$1":*)
@@ -10,7 +10,7 @@ append_path () {
     esac
 }
 
-# Prepend element before the rest of the path
+# Prepend element before the rest of the path.
 prepend_path () {
   case ":$PATH:" in
     *":$1:"*) ;;
@@ -18,7 +18,7 @@ prepend_path () {
   esac
 }
 
-# Red Hat path helper function
+# Red Hat's path helper function.
 pathmunge () {
 	if ! echo $path | grep -qE "(^|:)$1($|:)"
 	then
@@ -30,7 +30,7 @@ pathmunge () {
     fi
 }
 
-# Remove element from path
+# Remove specified element from path.
 path_remove () {
     if [ "$ZSH_VERSION" ]; then
 	    path=(${path#$1})
@@ -39,17 +39,17 @@ path_remove () {
     fi
 }
 
-# Convert path from relative to absolut
+# Convert path from relative to absolut.
 relative2absolut () {
   echo "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
 }
 
-# Binary checker helper
+# Binary checker helper.
 check_bin () {
     type -P ${1} &>/dev/null || return
 }
 
-# Print path one entry per line
+# Print path, one entry per line.
 print_path () {
     local -a dirs
     IFS=: read -ra dirs <<< "$PATH"
