@@ -55,9 +55,9 @@ die()
 	local ret="$?"; error "$@"; exit "$ret"
 }
 
-grp="$(type -p grep     || exit)"
-ifc="$(type -p ifconfig || exit)"
-sed="$(type -p sed      || exit)"
+grep="$(type -p grep || exit)"
+ifconfig="$(type -p ifconfig || exit)"
+sed="$(type -p sed || exit)"
 
 opt=$(getopt -o '?46I::b:i:e:d::m::S::s:ht::' -l block:,ext-iface:,jabber::,ipset:: \
 	-l mpd::,torrent::,int-iface:,ipv:,dhcp::,module::,mpd,save::,servicea,help: \

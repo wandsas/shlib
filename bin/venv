@@ -5,7 +5,8 @@
 
 # virtualenv magic
 unset PYTHONHOME
-export VIRTUAL_ENV=$(realpath "$1") PATH="$VIRTUAL_ENV/bin:$PATH"
+export VIRTUAL_ENV $(realpath $1) PATH $VIRTUAL_ENV/bin:$PATH
+eval "$(pyenv_root bash)"
 
 shift
 [ "$#" -gt "1" ] && "${@}" || "${SHELL:-/bin/sh}"
