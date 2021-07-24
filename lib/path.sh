@@ -27,7 +27,7 @@ pathmunge () {
         else
             path=($1 $path)
         fi
-    fi
+  fi
 }
 
 # Remove specified element from path.
