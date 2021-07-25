@@ -1,0 +1,2 @@
+#!/bin/sh
+zfs list -H -o name | grep ${1:-zroot}
