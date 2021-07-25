@@ -15,6 +15,10 @@ warn () {
     printf "\033[1m\033[94mWARNING:\033[m $@\n"
 }
 
+bold () {
+    printf "\033[1m$@\033[m\n"
+}
+
 error () {
     # bold/red
     printf "\033[1m\033[31mERROR:\033[m $@\n"

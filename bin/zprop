@@ -1,3 +1,14 @@
 #!/bin/sh
+
+. ~/lib/stdout-log.sh
+
+bold "${1} encryption"
 zfs get all ${1:-zroot} | egrep '(encryption|keylocation|keyformat)'
-[ -n "${1}" ] && sudo zfs load-key -n $1
+if [ -n "${1}" ]; then
+  sudo zfs load-key -n ${1}
+  printf "\n"
+  bold "${1} subvolumes"
+  zfs list -H -o name,used | grep ${1}
+fi
+
+
