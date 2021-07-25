@@ -1,2 +1,8 @@
 #!/bin/sh
-zfs list -H -o name | grep ${1:-zroot}
+
+. ~/lib/stdout-log.sh
+
+clear
+bold "ZFS volume: ${1:-zroot}"
+A
+zfs list -H -o name,used | grep ${1:-zroot}
