@@ -4,5 +4,4 @@
 
 clear
 bold "ZFS volume: ${1:-zroot}"
-A
 zfs list -H -o name,used | grep ${1:-zroot}
