@@ -1,0 +1,9 @@
+#!/bin/sh
+
+. ~/lib/stdout-log.sh
+
+export GPG_TTY=$(tty)
+
+echo UPDATESTARTUPTTY | gpg-connect-agent >/dev/null 2>&1
+
+[ $? != 0 ] && warn "failed" || info "success"
