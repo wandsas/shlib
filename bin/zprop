@@ -5,7 +5,9 @@
 clear
 bold "ZFS encryption: ${1:-zroot}"
 zfs get all ${1:-zroot} | egrep '(encryption|keylocation|keyformat)'
-[ -n "${1}" ] && sudo zfs load-key -n ${1}
+if [ -n "${1}" ]; then
+    sudo zfs load-key -n $(echo ${1} | awk -F'/' '{print $1}')
+fi
 
 printf "\n"
 bold "ZFS subvolumes: ${1:-zroot}"
