@@ -1,5 +1,7 @@
 # ~/lib/tmux.sh
 
+. ~/lib/stdout-log.sh
+
 # Get current tmux session.
 tmux-current-session () {
     if [ "$TMUX" ]; then
@@ -68,3 +70,5 @@ tmux-kill-session () {
 tmux-kill-all-sessions () {
     tmux list-sessions | awk -F: '{print $1}' | xargs -n 1 tmux kill-session -t
 }
+
+info "Sourced tmux.sh."

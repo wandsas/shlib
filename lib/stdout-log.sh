@@ -6,13 +6,13 @@ msg () {
 }
 
 info () {
-    # bold/yellow
-    printf "\033[1m\033[93mINFO:\033[m $@\n"
+    # bold/black
+    printf "\033[1m\033[90mINFO:\033[m $@\n"
 }
 
 warn () {
     # bold/orange
-    printf "\033[1m\033[94mWARNING:\033[m $@\n"
+    printf "\033[1m\033[90mWARNING:\033[m $@\n"
 }
 
 bold () {
