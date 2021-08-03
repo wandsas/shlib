@@ -20,6 +20,10 @@ is_debian () {
 	[ -f /etc/debian_version ]
 }
 
+is_ubuntu () {
+    [ $(cat /etc/issue | awk '{print $1}') = "Ubuntu" ]
+}
+
 is_gentoo () {
 	[ -f /etc/gentoo_release ]
 }
