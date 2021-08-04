@@ -3,5 +3,9 @@
 . ~/lib/stdout-log.sh
 
 clear
-bold "ZFS volume: ${1:-zroot}"
-zfs list -H -o name,used | grep ${1:-zroot}
+bold "\nzfs pool: ${1:-zroot}"
+bold "name\tused\tavailable"
+zpool list -H -o name,alloc,free | grep ${1:-zroot}
+bold "\nzfs volumes: ${1:-zroot}"
+bold "name\tused\tavailable"
+zfs list -H -o name,used,avail | grep ${1:-zroot}
