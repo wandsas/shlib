@@ -8,6 +8,6 @@ windowid () {
 # record selected window and dump stream to current dir.
 recordmydesktop \
     --no-sound \
-    --output ${PWD}/recordmydesktp
+    --output ${PWD}/recordMyDesktop
     #--windowid $(windowid)  \
 
