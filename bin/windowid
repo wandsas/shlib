@@ -1,0 +1,3 @@
+#!/bin/sh
+
+xwininfo |sed -e 's/^ *//' | grep -E "Window id" | awk '{ print $4 }'
