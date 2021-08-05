@@ -1,0 +1,12 @@
+#!/bin/sh
+
+windowid () {
+    xwininfo |sed -e 's/^ *//' | grep -E "Window id" | awk '{ print $4 }'
+}
+
+recordmydesktop \
+    --no-sound \
+    --windowid $(windowid)  \
+    --on-the-fly-encoding m4a \
+    --v_bitrate=128 \
+    --output recordmydesktop
