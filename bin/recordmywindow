@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# get windowid of a window selected with mouse click.
+windowid () {
+    xwininfo |sed -e 's/^ *//' | grep -E "Window id" | awk '{ print $4 }'
+}
+
+# record selected window and dump stream to current dir.
+recordmydesktop \
+    --no-sound \
+    --windowid $(windowid)  \
+    --on-the-fly-encoding mp4 \
+    --output ${PWD}/recordmydesktop
+
+
