@@ -1,11 +1,13 @@
 #!/bin/sh
 
+# @TODO configure s6-logging for syncthing, gpg-agent. Both running fine as
+# runit user service with runit supervision capabilities.
+
 . ~/lib/stdout-log.sh
 
 export GPG_TTY=$(tty)
-
 export GPG_AGENT_INFO=${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent
 export SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
-echo UPDATESTARTUPTTY | gpg-connect-agent >/dev/null 2>&1
 
+echo UPDATESTARTUPTTY | gpg-connect-agent >/dev/null 2>&1
 [ $? != 0 ] && warn "failed" || info "success"
