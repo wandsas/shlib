@@ -1,5 +1,6 @@
 # Extravagant bash prompt
 
+# http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 extravagant_bash_prompt () {
     if tput setaf 1 &> /dev/null; then
         tput sgr0
@@ -29,6 +30,8 @@ extravagant_bash_prompt () {
     fi
 
     PS1="\[${BOLD}${MAGENTA}\]\u \[${WHITE}\]at \[${ORANGE}\]\h \[${WHITE}\]in \[${GREEN}\]\w\[${WHITE}\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on\")\[${PURPLE}\]\$(__git_ps1 \" (%s)\")\[${WHITE}\]\n» \[${RESET}\]"
+
+    unset MAGENTA ORANGE GREEN PURPLE WHITE BOLD RESET
 }
 
-PROMPT_COMMAND=extravagant_bash_prompt
+PROMPT_COMMAND="extravagant_bash_prompt; $PROMPT_COMMAND"

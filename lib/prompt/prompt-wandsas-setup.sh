@@ -12,4 +12,4 @@ function prompt_wandsas_setup {
 	TITLEBAR="\$:\w"
 }
 
-PROMPT_COMMAND=prompt_wandsas_setup
+PROMPT_COMMAND="prompt_wandsas_setup; $PROMPT_COMMAND"
