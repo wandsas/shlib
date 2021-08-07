@@ -18,17 +18,4 @@ record_my_desktop () {
         --output ${PWD}/recordMyDesktop
         #--windowid $(windowid)  \
 }
-
-
-main () {
-    msg "Encoding mp3 -> m4a"
-
-    for file in ${HOME}/syncthing/pixel4a/Music/newpipe/*.mp3; do
-        outputfile="${file#*.}.m4a"
-        nohub setsid $(record_my_desktop "${file}" "${outputfile}) >/dev/null 2>&1 < /dev/null &
-        info "Encoding aac (libfdk): ${file} -> ${outfile}"
-    done
-}
-main
-
-
+record_my_desktop
