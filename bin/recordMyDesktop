@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-. ~/lib/mylib.sh
+#. ~/lib/mylib.sh
 
 # Default display
 DISPLAY=:0.0
@@ -10,12 +10,8 @@ windowid () {
     xwininfo | awk '/Window id:/ {print $4}'
 }
 
-# record selected window and dump stream to current dir.
-record_my_desktop () {
-    recordmydesktop \
-        --no-sound \
-        --on-the-fly-encoding \
-        --output ${PWD}/recordMyDesktop
-        #--windowid $(windowid)  \
-}
-record_my_desktop
+recordmydesktop \
+    --no-sound \
+    --on-the-fly-encoding \
+    --output ${PWD}/recordMyDesktop
+    #--windowid $(windowid)  \
