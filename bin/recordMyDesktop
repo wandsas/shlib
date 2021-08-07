@@ -1,5 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
+. ~/lib/mylib.sh
+
+# Default display
 DISPLAY=:0.0
 
 # get windowid of a window selected with mouse click.
@@ -8,8 +11,24 @@ windowid () {
 }
 
 # record selected window and dump stream to current dir.
-recordmydesktop \
-    --no-sound \
-    --on-the-fly-encoding \
-    --output ${PWD}/recordMyDesktop
-    #--windowid $(windowid)  \
+record_my_desktop () {
+    recordmydesktop \
+        --no-sound \
+        --on-the-fly-encoding \
+        --output ${PWD}/recordMyDesktop
+        #--windowid $(windowid)  \
+}
+
+
+main () {
+    msg "Encoding mp3 -> m4a"
+
+    for file in ${HOME}/syncthing/pixel4a/Music/newpipe/*.mp3; do
+        outputfile="${file#*.}.m4a"
+        nohub setsid $(record_my_desktop "${file}" "${outputfile}) >/dev/null 2>&1 < /dev/null &
+        info "Encoding aac (libfdk): ${file} -> ${outfile}"
+    done
+}
+main
+
+

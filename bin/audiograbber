@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+# convert <inputfile.mp3> <outputfile.m4a>
+convert () {
+    ffmpeg -i ${1} ${2}
+}
+
+for file in ${HOME}/syncthing/pixel4a/Music/newpipe/*.mp3; do
+    nohub setsid $(audiograbber ${file}) >/dev/null 2>&1 < /dev/null &
+done
