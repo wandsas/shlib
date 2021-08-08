@@ -43,7 +43,7 @@ tmux-new-session () {
 }
 
 # Create new tmux window.
-tmux_new_window () {
+tmux-new-window () {
     tmux-check-session-var
     tmux new-window -t "$tmux_session" "$@"
 }

@@ -1,6 +1,6 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-#. ~/lib/mylib.sh
+. ~/lib/mylib.sh
 
 # Default display
 DISPLAY=:0.0
@@ -10,8 +10,10 @@ windowid () {
     xwininfo | awk '/Window id:/ {print $4}'
 }
 
-recordmydesktop \
-    --no-sound \
-    --on-the-fly-encoding \
-    --output ${PWD}/recordMyDesktop
-    #--windowid $(windowid)  \
+
+args="--no-sound"
+args+=" --on-the-fly-encoding"
+args+=" --output ${PWD}/recordMyDesktop"
+[ ${1} = "window" ] && args+=" --windowid $(windowid)"
+#recordmydesktop
+echo ${args}

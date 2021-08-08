@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # ~/lib/path.sh
 
 # Append element at the end of the path.
@@ -18,17 +19,18 @@ prepend_path () {
   esac
 }
 
+# function has bashism
 # Red Hat's path helper function.
-pathmunge () {
-	if ! echo $path | grep -qE "(^|:)$1($|:)"
-	then
-        if [[ "$2" = "after" ]]; then
-            path=(${path} $1)
-        else
-            path=($1 $path)
-        fi
-  fi
-}
+#pathmunge () {
+#	if ! echo $path | grep -qE "(^|:)$1($|:)"
+#	then
+#        if [ "$2" == "after" ]; then
+#            path=(${path} $1)
+#        else
+#            path=($1 $path)
+#        fi
+#  fi
+#}
 
 # Remove specified element from path.
 path_remove () {
