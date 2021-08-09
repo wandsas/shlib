@@ -1,25 +1,32 @@
 #!/usr/bin/env sh
 
-# convert <inputfile.mp3> <outputfile.m4a>
+. ~/lib/stdout-log.sh
+
+# convert <input.mp3> <output.m4a>
 convert () {
-    ffmpeg -i ${1} ${2}
+    local input="${1}"
+    local output="${2}"
+
+    ffmpeg \
+        -c:a libfdk_aac \
+        -b:a 128k \
+        -i "${input}" \
+        "${output}"
 }
 
-# @TODO
+
+
+main () {
+local i=0
 for file in ${HOME}/syncthing/pixel4a/Music/newpipe/*.mp3; do
-    nohub setsid $(audiograbber ${file}) >/dev/null 2>&1 < /dev/null &
+    local infile="${file}"
+    local outfile="${file%.*}.m4a"
+    i="$((i+1))"
+    
+    convert "${infile}" "${outfile}"
+
+    msg "$(i) file: `basename "${infile}"` transcoded to `basename "${outfile}"`"
 done
 
-# @TODO
-main () {
-    msg "Encoding mp3 -> m4a"
-
-    for file in ${HOME}/syncthing/pixel4a/Music/newpipe/*.mp3; do
-        outputfile="${file#*.}.m4a"
-        nohub setsid $(record_my_desktop "${file}" "${outputfile}) >/dev/null 2>&1 < /dev/null &
-        info "Encoding aac (libfdk): ${file} -> ${outfile}"
-    done
 }
 main
-
-
