@@ -18,5 +18,5 @@ if [ "${1}" == "window" ]; then
     info "Please select a window with a mouse client."
     args+=" --windowid $(windowid)"
 fi
-#recordmydesktop
-echo recordmydesktop ${args}
+
+recordmydesktop ${args}
