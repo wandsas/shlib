@@ -8,9 +8,9 @@ convert () {
     local output="${2}"
 
     ffmpeg \
+        -i "${input}" \
         -c:a libfdk_aac \
         -b:a 128k \
-        -i "${input}" \
         "${output}"
 }
 
