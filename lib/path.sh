@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 # ~/lib/path.sh
 
 # Append element at the end of the path.
@@ -34,11 +33,11 @@ prepend_path () {
 
 # Remove specified element from path.
 path_remove () {
-    if [ "$ZSH_VERSION" ]; then
-	    path=(${path#$1})
-	else
+    #if [ "$ZSH_VERSION" ]; then
+	#    path=(${path#$1})
+	#else
         PATH=$(echo ${PATH} | sed -e 's;:\?$%{1};;' -e 's;${1}:\?;;')
-    fi
+    #fi
 }
 
 # Convert path from relative to absolut.

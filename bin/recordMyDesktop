@@ -14,6 +14,9 @@ windowid () {
 args="--no-sound"
 args+=" --on-the-fly-encoding"
 args+=" --output ${PWD}/recordMyDesktop"
-[ ${1} = "window" ] && args+=" --windowid $(windowid)"
+if [ "${1}" == "window" ]; then
+    info "Please select a window with a mouse client."
+    args+=" --windowid $(windowid)"
+fi
 #recordmydesktop
-echo ${args}
+echo recordmydesktop ${args}
