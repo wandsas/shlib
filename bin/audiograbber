@@ -2,6 +2,8 @@
 
 . ~/lib/stdout-log.sh
 
+FILESDIR="${1:-$HOME/syncthing/pixel4a/Music/newpipe}"
+
 # convert <input.mp3> <output.m4a>
 convert () {
     local input="${1}"
@@ -9,24 +11,29 @@ convert () {
 
     ffmpeg \
         -i "${input}" \
-        -c:a libfdk_aac \
-        -b:a 128k \
+        -c:a aac \
+        -b:a 160k \
         "${output}"
 }
 
 
 
 main () {
-local i=0
-for file in ${HOME}/syncthing/pixel4a/Music/newpipe/*.mp3; do
-    local infile="${file}"
-    local outfile="${file%.*}.m4a"
-    i="$((i+1))"
+    local i=0
+    local filescount=$(find "${FILESDIR}" -iname "*.mp3" -print | wc -l)
     
-    convert "${infile}" "${outfile}"
+    [ "${filescount}" = "0" ] && die "No mp3 files found. Aborting."
+    msg "Found ${filescount} mp3 files in directory ${FILESDIR}"
+    
 
-    msg "${i} file: `basename "${infile}"` transcoded to `basename "${outfile}"`"
-done
+    for file in ${FILESDIR}/*.mp3; do
+        local infile="${file}"
+        local outfile="${file%.*}.m4a"
+        i="$((i+1))"
+    
+        convert "${infile}" "${outfile}"
+        msg "${i} file: `basename "${infile}"` transcoded to `basename "${outfile}"`"
+    done
 
 }
 main
