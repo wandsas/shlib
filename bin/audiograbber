@@ -25,7 +25,7 @@ for file in ${HOME}/syncthing/pixel4a/Music/newpipe/*.mp3; do
     
     convert "${infile}" "${outfile}"
 
-    msg "$(i) file: `basename "${infile}"` transcoded to `basename "${outfile}"`"
+    msg "${i} file: `basename "${infile}"` transcoded to `basename "${outfile}"`"
 done
 
 }
