@@ -1,0 +1,22 @@
+#!/bin/sh
+
+. ~/lib/tmux.sh
+
+tmux_session=void
+
+if [ ! tmux-has-session $tmux_session ]; then
+    tmux new-session -d -s $tmux_session
+
+    tmux rename-window -t 0 main
+    tmux send-keys -t main bash C-m clear C-m
+
+    tmux new-window -t ${tmux_session}:1 -n build
+
+    tmux send-keys -t monitor htop C-m
+
+    tmux new-window -t ${tmux_session}:2 -n editor
+    tmux send-keys -t editor vim C-m
+fi
+
+
+tmux attach-session -t ${tmux_session}:0

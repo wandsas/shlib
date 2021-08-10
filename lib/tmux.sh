@@ -67,5 +67,4 @@ tmux-kill-session () {
 # Find all tmux sessions and kill them.
 tmux-kill-all-sessions () {
     tmux list-sessions | awk -F: '{print $1}' | xargs -n 1 tmux kill-session -t
-    A
 }
