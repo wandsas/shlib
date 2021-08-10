@@ -1,9 +1,0 @@
-/var/log/ipt.log {
-	weekly
-	rotate 5
-	minsize 1M
-	compress
-    missingok
-    create 0600 root adm
-}
-
