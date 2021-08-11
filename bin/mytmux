@@ -15,10 +15,10 @@ fi
 tmux new-session -d -s ${tmux_session}
     
 tmux rename-window -t ${tmux_session}:1 "Main"
-tmux send-keys -t ${tmux_session}:1  'bash' C-m
+tmux send-keys -t ${tmux_session}:1 reinit-gpg-agent
 
-tmux new-window -t ${tmux_session}:2 -n "Monitor"
-tmux send-keys -t ${tmux_session}:2 'htop' C-m
+tmux new-window -t ${tmux_session}:2
+tmux send-keys -t ${tmux_session}:2
 tmux split-window -d
 
 tmux attach-session -t ${tmux_session}:1
