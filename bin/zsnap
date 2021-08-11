@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/lib/stdout-log.sh
+. /home/wandsas/lib/stdout-log.sh
 
 if [ "$#" -le 1 ]; then
     zfs get "com.sun:auto-snapshot" "${1:-zroot}"

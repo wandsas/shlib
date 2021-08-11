@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/lib/stdout-log.sh
+. /home/wandsas/lib/stdout-log.sh
 
 bold "pool: ${1:-zroot}"
 bold "name\tused\tavailable"
