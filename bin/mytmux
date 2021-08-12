@@ -2,11 +2,7 @@
 
 tmux_session="void"
 
-tmux_has_session () {
-    tmux has-session -t "$1" 2>/dev/null
-}
-
-if ! tmux_has_session "${tmux_session}"; then
+if ! tmux has-session -t "${tmux_session}" 2>/dev/null; then
 
     if [ -n "${TMUX}" ]; then
         info "Detach from the tmux server before running this."

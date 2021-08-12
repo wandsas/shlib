@@ -1,9 +1,5 @@
 #!/bin/sh
-#
-# $Header: mkinitramfs-ll/busybox.sh                     Exp $
-# $Author: (c) 2011-2015 -tclover <tokiclover@gmail.com> Exp $
-# $License: 2-clause/new/simplified BSD                  Exp $
-# $Version: 0.22.0 2016/11/06 12:33:03                   Exp $
+# Build Busybox on Gentoo Linux
 
 name=busybox
 shell=sh
