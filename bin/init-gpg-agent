@@ -9,3 +9,7 @@ export SSH_AUTH_SOCK=${XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh
 echo 2>&1
 echo UPDATESTARTUPTTY | gpg-connect-agent >/dev/null 2>&1
 [ $? != 0 ] && warn "Initialization of gpg-agent failed." || msg "gpg-agent initialized."
+
+# Allow remote X connections for docker/lxd container.
+xhost + >/dev/null 2>&1
+msg "Allow remote X connections for docker/lxd container."

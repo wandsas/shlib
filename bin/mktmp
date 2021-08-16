@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [[ -f "${HOME}"/lib/functions.bash ]]; then
-	source "${HOME}"/lib/functions.bash
+if [[ -f "${HOME}"/lib/functions.sh ]]; then
+	source "${HOME}"/lib/functions.sh
 else
 	function pr-error {
 		echo -e " \e[1;31m* \e[0m${0##*/}: $@" >&2
