@@ -2,7 +2,7 @@
 
 . ~/lib/stdout-log.sh
 
-FILESDIR="${1:-$HOME/syncthing/pixel4a/Music/newpipe}"
+FILESDIR="${1:-$PWD}"
 
 # convert <input.mp3> <output.m4a>
 convert () {

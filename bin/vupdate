@@ -1,0 +1,8 @@
+#!/bin/sh
+
+which void-updates >/dev/null 2>&1 || exit 0;
+
+void-updates \
+    -r git://github.com/void-linux/void-packages.git \
+    -s ~/void-packages \
+    -o ~/void-updates
