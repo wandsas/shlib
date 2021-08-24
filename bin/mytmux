@@ -11,7 +11,7 @@ if ! tmux has-session -t "${tmux_session}" 2>/dev/null; then
     tmux new-session -d -s ${tmux_session}
     
     tmux rename-window -t ${tmux_session}:1 "Main"
-    tmux send-keys -t ${tmux_session}:1 init-gpg-agent C-m
+    tmux send-keys -t ${tmux_session}:1 'init-gpg-agent' C-m
 
     tmux new-window -t ${tmux_session}:2
     tmux send-keys -t ${tmux_session}:2 'htop' C-m
