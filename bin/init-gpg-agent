@@ -11,4 +11,4 @@ echo UPDATESTARTUPTTY | gpg-connect-agent >/dev/null 2>&1
 
 # Allow remote X11 connections for container.
 xhost + >/dev/null 2>&1
-msg "Allow remote X11 connections for container."
+[ $? != 0 ] && warn "Failed to allow X11 remote connections." || msg "Allow remote X11 connections."
