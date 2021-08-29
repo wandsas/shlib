@@ -1,14 +1,17 @@
 #!/bin/sh
 
-. ~/lib/stdout-log.sh
-
-export GPG_TTY=$(tty)
-export GPG_AGENT_INFO=${GPG_AGENT_INFO:-$XDG_RUNTIME_DIR/gnupg/S.gpg-agent}
-export SSH_AUTH_SOCK=${SSH_AUTH_SOCK:-$XDG_RUNTIME_DIR}/gnupg/S.gpg-agent.ssh}
+. /home/wandsas/lib/stdout-log.sh
+. /home/wandsas/.config/bashrc.d/gpg-agent.sh
 
 echo UPDATESTARTUPTTY | gpg-connect-agent >/dev/null 2>&1
 [ $? != 0 ] && warn "Initialization of gpg-agent failed." || msg "gpg-agent initialized."
 
-# Allow remote X11 connections for container.
-xhost + >/dev/null 2>&1
-[ $? != 0 ] && warn "Failed to allow X11 remote connections." || msg "Allow remote X11 connections."
+if command -v xhost >/dev/null 2>&1; then
+    # Allow remote X11 connections for container.
+    xhost + >/dev/null 2>&1
+    if [ $? != 0 ]; then
+        warn "Failed to allow X11 remote connections."
+    else
+        msg "Allow remote X11 connections."
+    fi
+fi

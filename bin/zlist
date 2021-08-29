@@ -2,9 +2,9 @@
 
 . /home/wandsas/lib/stdout-log.sh
 
-bold "pool: ${1:-zroot}"
-bold "name\tused\tavailable"
+boldtext "pool: ${1:-zroot}"
+boldtext "name\tused\tavailable"
 zpool list -H -o name,alloc,free | grep ${1:-zroot}
-bold "volumes: ${1:-zroot}"
-bold "name\tused\tavailable"
+boldtext "volumes: ${1:-zroot}"
+boldtext "name\tused\tavailable"
 zfs list -H -o name,used,avail | grep ${1:-zroot}

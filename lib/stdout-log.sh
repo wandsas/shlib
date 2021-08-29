@@ -1,8 +1,13 @@
-# ~/lib/stdout-log.sh
+# stdout-log.sh
 
 msg () {
-    # bold/yellow
-    printf "\033[1m\033[93m=>\033[m $@\n"
+    # bold/black
+    printf "\033[1m\033[90m=>\033[m $@\n"
+}
+
+boldtext () {
+    # bold
+    printf "\033[1m$@\033[m\n"
 }
 
 info () {
@@ -12,11 +17,7 @@ info () {
 
 warn () {
     # bold/orange
-    printf "\033[1m\033[90mWARNING:\033[m $@\n"
-}
-
-bold () {
-    printf "\033[1m$@\033[m\n"
+    printf "\033[1m\033[92mWARNING:\033[m $@\n"
 }
 
 error () {

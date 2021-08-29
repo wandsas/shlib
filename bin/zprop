@@ -1,16 +1,16 @@
 #!/bin/sh
 
-. ~/lib/stdout-log.sh
+. /home/wandsas/lib/stdout-log.sh
 
 clear
-bold "ZFS encryption: ${1:-zroot}"
+boldtext "ZFS encryption: ${1:-zroot}"
 zfs get all ${1:-zroot} | egrep '(encryption|keylocation|keyformat)'
 if [ -n "${1}" ]; then
     sudo zfs load-key -n $(echo ${1} | awk -F'/' '{print $1}')
 fi
 
 printf "\n"
-bold "ZFS subvolumes: ${1:-zroot}"
+boldtext "ZFS subvolumes: ${1:-zroot}"
 zfs list -H -o name,used | grep ${1:-zroot}
 
 

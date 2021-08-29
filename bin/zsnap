@@ -1,17 +1,13 @@
 #!/bin/sh
 
-. /home/wandsas/lib/stdout-log.sh
-
-if [ "$#" -le 1 ]; then
-    zfs get "com.sun:auto-snapshot" "${1:-zroot}"
-elif [ $# -eq 2 ]; then
+if [ $# -eq 2 ]; then
     case "${2}" in
-    true|false)
-        sudo zfs set "com.sun:auto-snapshot=${2}" "${1}";;
-    *)
-        warn "Unknown argument: ${2}"
-        info "Only boolean [true/false] are allowed. Abort."
-        exit 1;
-  esac
-  zfs get "com.sun:auto-snapshot" "${1}"
+        true|false)
+            sudo zfs set "com.sun:auto-snapshot=${2}" "${1}";;
+        *)
+            echo "Unknown argument: ${2}"
+            echo "Only boolean [true/false] are allowed. Abort."
+            exit 1;
+    esac
 fi
+zfs get "com.sun:auto-snapshot" "${1:-zroot}"
