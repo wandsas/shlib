@@ -20,5 +20,5 @@ printf "${bold}${yellow}=>${reset} zmirror2 ${bold}${@}${reset}" >&2
 check_temp "/dev/disk/by-id/scsi-35000c500479f8a9f" | awk '{print $4}'
 
 ###   lxd   ###
-printf "${bold}${yellow}=>${reset} lxd ${bold}${@}${reset}" >&2
+printf "${bold}${yellow}=>${reset} zdatastore ${bold}${@}${reset}" >&2
 check_temp "/dev/disk/by-id/scsi-35000cca01f88ba94" | awk '{print $4}'
