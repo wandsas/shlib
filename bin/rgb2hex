@@ -1,3 +1,0 @@
-#!/bin/sh
-# rgb2hex red green blue - converts rgb to hex colors
-printf "#%02x%02x%02x\n" $@

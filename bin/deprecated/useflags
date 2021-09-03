@@ -1,0 +1,711 @@
+#!/usr/bin/env perl
+BEGIN { require 5.006_001 }
+package Useflags;
+our $VERSION = 'v4.1.3';
+eval { $VERSION = version->declare($VERSION) };
+eval 'use version 0.77; $VERSION = version->declare($VERSION)' if($@);
+
+use strict;
+use integer;
+use File::Spec ();
+use Getopt::Long 2.24 ();
+#use Pod::Usage ();  # needed for --man, --help, some errors
+#use String::ShellQuote ();  # not mandatory but recommended: poor fallback
+#use File::Which ();  # not mandatory but recommended; there are fallbacks
+
+my $name = 'useflags';
+
+=encoding UTF-8
+
+=head1 NAME
+
+useflags - save or compare useflags
+
+=head1 SYNOPSIS
+
+B<useflags> [options] B<save>|B<diff>|B<print>|B<cat>|B<diff64>|B<help>|B<man>
+
+B<useflags> [options] B<save> I<file>
+
+B<useflags> [options] B<diff> I<file>
+
+B<useflags> [options] B<diff> I<file1> I<file2>
+
+B<useflags> [options] B<cat> I<file>
+
+B<useflags --man> or <useflags man> for a detailed description
+
+=head1 DESCRIPTION
+
+Note that I<savepath> defaults to F</etc/portage/useflags>.
+This path can be changed with the option F<-f>
+
+=over 8
+
+=item B<useflags> [options] B<save>
+
+save useflags to I<savepath>
+
+=item B<useflags> [options] B<save> I<file>
+
+save useflags to I<file>
+
+=item B<useflags> [options] B<diff>
+
+diff useflags saved in I<savepath> with current useflags
+
+=item B<useflags> [options] B<diff> I<file>
+
+diff useflags saved in I<file> with those saved in I<savepath>
+
+=item B<useflags> [options] B<diff> I<file1> I<file2>
+
+diff current useflags saved in I<file1> with those saved in F<file2>
+
+=item B<useflags> [options] B<print>
+
+print current useflags
+
+=item B<useflags> [options] B<cat>
+
+print useflags saved in I<savepath>
+
+=item B<useflags> [options] B<cat> I<file>
+
+print useflags saved in I<file>
+
+=item B<useflags> [options] B<diff64>
+
+same as:
+B<useflags> [options] B<diff> B</gentoo32>I<savepath> B</gentoo64>I<savepath>
+
+=back
+
+=head1 PROBLEMS
+
+This script does not set the defaults according to use.defaults -
+this corresponds to the behaviour of F<E<gt>=portage-2.1*> but not to
+F<E<lt>=portage-2.0*>.
+
+=head1 OPTIONS AND ARGUMENTS
+
+=over 8
+
+=item B<--help> or B<-h>
+
+Display brief help
+
+=item B<--man> or B<-?>
+
+Display extended help as a manpage
+
+=item B<--brief> or B<-b>
+
+Do not consider full information, only print/store/compare
+whether the useflags are effectively "on", "off" or "minus"
+
+=item B<--verbose> or B<-v>
+
+This is the default (and the opposite of B<--brief>)
+
+=item B<--file=>I<pathname> or B<-f> I<pathname>
+
+Use I<pathname> as I<savepath>
+
+=item B<--reverse> or B<-r>
+
+Reverse the output when comparing two sets of useflags,
+i.e. swap the meaning of old/new.
+
+=item B<-->
+
+Last option
+
+=back
+
+=head1 AUTHOR
+
+Martin VE<auml>th E<lt>martin@mvath.deE<gt>
+
+=cut
+
+# Global variables:
+
+my $rootdir = File::Spec->rootdir();
+
+# Options:
+
+my $brief = '';
+my $verbose = '';
+my $savepath = File::Spec->catdir($rootdir, 'etc', 'portage', 'useflags');
+my $reverse = '';
+
+# Some constants: These are the index numbers of the array stored in %useflags
+
+my $set = 0;
+my $manual = 1;
+my $default = 2;
+my $masked = 3;
+my $documented = 4;
+
+
+sub pod2usage {
+	require Pod::Usage;
+	&Pod::Usage::pod2usage
+}
+
+sub version {
+	print($name, ' ', $VERSION, "\n");
+	exit(0)
+}
+
+sub message {
+	print(STDERR $name, ': ', @_, "\n")
+}
+
+sub fatal {
+	&message;
+	exit 2
+}
+
+# use String::ShellQuote () and return whether successful
+
+{ my $shellquote = undef;  # A closure static variable
+sub use_shellquote {
+	return $shellquote if(defined($shellquote));
+	eval {
+		require String::ShellQuote
+	};
+	$shellquote = !$@
+}}
+
+sub shell_quote_best_effort {
+	(&use_shellquote() ?
+		&String::ShellQuote::shell_quote_best_effort : &join_quoted)
+}
+
+# like join(' ', @_), but shell-quote arguments
+
+sub join_quoted {
+	my @r;
+	for my $i (@_) {
+		my $a = $i;
+		$a =~ s{\'}{\'\\\'\'}g;
+		$a = "'$a'";
+		$a =~ s{(\A|[^\\])\'([\w\-\,\.\:\/]*)\'}{$1$2}gm;
+		push(@r, ($a ne '') ? $a : "''")
+	}
+	join(' ', @r)
+}
+
+{
+	my $devnull = undef;
+sub devnull {
+	return $devnull if(defined($devnull));
+	$devnull = &shell_quote_best_effort(File::Spec->devnull())
+}}
+
+# use File::Which module
+
+{
+	my $which = undef;  # A static closure
+sub which_which {
+	return $which if(defined($which));
+	eval {
+		require File::Which
+	};
+	$which = ($@ ? '' : 1)
+}}
+
+sub have_prg {
+	my ($a) = @_;
+	if(&which_which()) {
+		return defined(File::Which::which($a))
+	}
+	(system(&shell_quote_best_effort('command', '-v', $a)
+		. ' >' . &devnull() . ' 2>&1') == 0)
+}
+
+# Check whether eix is available. If yes, also export PRINT_APPEND=
+{
+	my $have_eix = undef;
+sub have_eix {
+	return $have_eix if(defined($have_eix));
+	$have_eix = &have_prg('eix');
+	$ENV{'PRINT_APPEND'} = '' if($have_eix);
+	$have_eix
+}}
+
+sub read_var {
+	my ($varname) = @_;
+	return $ENV{$varname} if(exists($ENV{$varname}));
+	my $have_eix = &have_eix();
+	my $cmd = &shell_quote_best_effort(($have_eix ?
+		('eix', '--print') : ('portageq', 'envvar')), $varname)
+		. ' 2>' . &devnull();
+	my $result = `$cmd`;
+	$result = '' unless(defined($result));
+	chomp($result) unless($have_eix);
+	$result
+}
+
+# Transform such an array to readable text or vice versa:
+
+sub entry2text {
+	my ($arrref) = @_;
+	my $isset = ($arrref->[$set]);
+	if($brief) {
+		if($arrref->[$masked]) {
+			return 'minus'
+		}
+		if($isset) {
+			if($isset > 0) {
+				return 'on'
+			} else {
+				return 'minus'
+			}
+		}
+		return 'off'
+	}
+	my $rvalue;
+	if($isset) {
+		if($isset > 0) {
+			$rvalue = 'on'
+		} else {
+			$rvalue = 'minus'
+		}
+	} else {
+		$rvalue = 'off'
+	}
+	if($arrref->[$manual]) {
+		$rvalue .= ', make.conf'
+	}
+	if($arrref->[$default]) {
+		$rvalue .= ', default'
+	}
+	unless($arrref->[$documented]) {
+		$rvalue .= ', undocumented'
+	}
+	if($arrref->[$masked]) {
+		$rvalue = '(' . $rvalue . ')';
+	}
+	$rvalue
+}
+
+sub text2entry {
+	my ($arrref,$text) = @_;
+	$arrref->[$set] = ($text =~ m{\bon\b}i);
+	$arrref->[$manual] = ($text =~ m{\bma[kn]}i);
+	if(($text =~ m{\bmin}i) || ($text =~ m{\-}) || ($text =~ m{\bneg}i) ||
+		(($text =~ m{\bfor}i) && ($text =~ m{\boff}i))) {
+		$arrref->[$set] = -1;
+		$arrref->[$manual] = -1
+	}
+	$arrref->[$default] = ($text =~ m{\bdef}i);
+	$arrref->[$documented] = !($text =~ m{\bundoc}i);
+	$arrref->[$masked] = (($text =~ m{\bmask}i) || ($text =~ m{\(}) )
+}
+
+# return reference to the entry $flag in the hash %$useflags.
+# If $flag does not exist, the entry becomes an empty array
+
+sub entry {
+	my ($useflags, $flag) = @_;
+	exists(${$useflags}{$flag}) or ${$useflags}{$flag} = ['','','','',''];
+	return ${$useflags}{$flag}
+}
+
+# Consider entry $flag in the hash %$useflags - this is an array.
+# If the array entry $nr is empty (or if $force is true), store $value.
+# If in addition $secnr is nonempty (and $value is stored), store the value
+# also into array entry $secnr.
+
+sub store {
+	my ($force, $useflags, $flag, $nr, $secnr, $value) = @_;
+	my $entry = &entry($useflags, $flag);
+	if($force || ($entry->[$nr] eq '')) {
+		$entry->[$nr] = $value;
+		$entry->[$secnr] = $value if($secnr ne '')
+	}
+}
+
+# Set/unset "manual" all values in the hash %$useflags which match $match.
+
+sub useset {
+	my ($useflags, $match, $doset) = @_;
+	unless($match =~ m{[\?\*]}) {
+		&store(1, $useflags, $match, $manual, $set, $doset);
+		return
+	}
+	$match =~ s{\?}{.}g;
+	$match =~ s{\*}{.*}g;
+	for(keys(%$useflags)) {
+		&store(1, $useflags, $_, $manual, $set, $doset) if(m{^$match$})
+	}
+}
+
+# Function to parse a profile recursively
+
+sub readprofile {
+	my ($mustexist, $profile, $useflags, $count) = @_;
+	&fatal("$profile is not a directory") if($mustexist && !(-d $profile));
+	&fatal('profile has too many parents; probably recursion')
+		if($count > 1000);
+	my $parent = File::Spec->catdir($profile, 'parent');
+	if(-r $parent) {
+		my @parents = ();
+		open(my $in, '<', $parent) or
+			&fatal("cannot read $parent");
+		while(<$in>) {
+			chomp();
+			s{^\s*([^\s]*).*$}{$1};
+			s{^#.*}{};
+			push(@parents, $_) if($_ ne '')
+		}
+		close($in);
+		for my $p (@parents) {
+			my $dirname = File::Spec->file_name_is_absolute($p) ?
+				$p : File::Spec->catdir($profile, $p);
+			&readprofile(1, $dirname, $useflags, $count + 1)
+		}
+	}
+	&readprofiledata($profile, $useflags, 1)
+}
+
+sub readprofiledata {
+	my ($profile, $useflags, $readmakedefaults) = @_;
+	my $use_mask = File::Spec->catdir($profile, 'use.mask');
+	if(-e $use_mask) {
+		open(my $in, '<', $use_mask) or &fatal("cannot read $use_mask");
+		while(<$in>) {
+			chomp();
+			s{^\s*([^\s]*).*}{$1};
+			s{^#.*}{};
+			next if($_ eq '');
+			if(m{^\-(.*)}) {
+				&store(1, $useflags, $1, $masked, '', 0)
+			} else {
+				&store('', $useflags, $_, $masked, '', 1)
+			}
+		}
+		close($in)
+	}
+	my $use_desc = File::Spec->catdir($profile, 'use.desc');
+	if(-e $use_desc) {
+		open(my $in, '<', $use_desc) or &fatal("cannot read $use_desc");
+		while(<$in>) {
+			chomp();
+			s{^\s*([^\s]*).*}{$1};
+			s{^#.*}{};
+			&store(1, $useflags, $_, $documented, '', 1) if($_ ne '')
+		}
+		close($in)
+	}
+	my $use_local_desc = File::Spec->catdir($profile, 'use.local.desc');
+	if(-e $use_local_desc) {
+		open(my $in, '<', $use_local_desc) or &fatal("cannot read $use_local_desc");
+		while(<$in>) {
+			chomp();
+			s{^\s*([^\s]*).*}{$1};
+			s{^#.*}{};
+			s{^[^:]*:}{};
+			&store(1, $useflags, $_, $documented, '', 1) if($_ ne '')
+		}
+		close($in)
+	}
+	# We read the use.defaults to find undocumented useflags,
+	# but we do not set them.
+	my $use_defaults = File::Spec->catdir($profile, 'use.defaults');
+	if(-e $use_defaults) {
+		open(my $in, '<', $use_defaults) or &fatal("cannot read $use_defaults");
+		while(<$in>) {
+			chomp();
+			s{^\s*([^\s]*).*$}{$1};
+			s{^#.*}{};
+			&entry($useflags, $_) if($_ ne '')
+		}
+		close($in)
+	}
+	return unless($readmakedefaults);
+	my $make_defaults = File::Spec->catdir($profile, 'make.defaults');
+	if(-e $make_defaults) {
+		((-f $make_defaults) && (-r $make_defaults)) or
+			&fatal("cannot read $make_defaults");
+		my $file = &shell_quote_best_effort($make_defaults);
+		my $iuse = `bash -c \'. \"\$1\"\
+printf \"\%s\" \"\$USE\"\' bash $file`;
+		&useset_profile($iuse, $useflags)
+	}
+}
+
+sub useset_profile {
+	($_, my $useflags) = @_;
+	for(split()) {
+		chomp();
+		s{^\s*([^\s]*).*$}{$1};
+		next if($_ eq '');
+		if(m{^\-(.*)}) {
+			&store('', $useflags, $1, $default, $set, 0)
+		} else {
+			&store('', $useflags, $_, $default, $set, 1)
+		}
+	}
+}
+
+sub eixreadprofile {
+	my ($useflags) = @_;
+	my $profile_paths = `eix --print-profile-paths 2>/dev/null`;
+	chomp($profile_paths);
+	return '' if($profile_paths eq '');
+	for my $profile (split('\0', $profile_paths)) {
+		chomp($profile);
+		chop($profile);
+		&readprofiledata($profile, $useflags, '') unless($profile eq '')
+	}
+	return 1
+}
+
+# "Parse" the values of USE, PORTDIR, PORTDIR_OVERLAY from make.conf
+# and store it in into $iuse, $portdir, $overlays
+sub getflags {
+	&have_eix() ? &getflags_eix : &getflags_portageq
+}
+
+sub getflags_eix() {
+	my ($useflags) = @_;
+	my $portdir = &read_var('PORTDIR');
+	chop($portdir);
+	$portdir = File::Spec->catdir('usr', 'portage') if($portdir eq '');
+	$_ = $portdir . ' ' . &read_var('PORTDIR_OVERLAY');
+	my @repos = split();
+	my $configroot = &read_var('PORTAGE_CONFIGROOT');
+	$configroot = $rootdir if($configroot eq '');
+	return unless(&eixreadprofile($useflags));
+	for my $repo (@repos) {
+		&readprofiledata(File::Spec->catdir($repo, 'profiles'),	$useflags, '')
+	}
+	&readprofiledata(File::Spec->catdir($configroot,
+		'etc', 'portage', 'profile'), $useflags, '');
+	my $iuse = &read_var('USE.profile');
+	&useset_profile($iuse, $useflags);
+	&useset_make_conf(&read_var('USE'), $useflags);
+}
+
+sub getflags_portageq() {
+	my ($useflags) = @_;
+	my @repos = ();
+	my $eroot = &read_var('EROOT');
+	$eroot = &rootdir() if($eroot eq '');
+	my $devnull = &devnull();
+	my $cmd = &shell_quote_best_effort('portageq', 'get_repos', $eroot);
+	$_ = `$cmd 2>$devnull`;
+	for my $reponame (split()) {
+		my $cmd = &shell_quote_best_effort('portageq', 'get_repo_path', $eroot, $reponame);
+		my $repopath = `$cmd 2>$devnull`;
+		chomp($repopath);
+		push(@repos, $repopath) if(defined($repopath) && ($repopath ne ''))
+	}
+	my $configroot = &read_var('PORTAGE_CONFIGROOT');
+	$configroot = $rootdir if($configroot eq '');
+	my $iuse = '';
+	for my $make_conf (File::Spec->catdir($configroot, 'etc', 'make.conf'),
+		File::Spec->catdir($configroot, 'etc', 'portage', 'make.conf')) {
+		my $file = &shell_quote_best_effort($make_conf);
+		my $add = '';
+		if(-f $file) {
+			$add = `bash -c \'. \"\$1\"\
+printf \"\%s\" \"\$USE\"\' bash $file`
+		} elsif(-d $file) {
+			$add = `bash -c \'shopt -s globstar
+for file in \"\$1\"\/**
+do	! test -f \"\$file\" || ! test -r \"\$file\" || . \"\$file\"\
+done
+printf \"\%s\" \"\$USE\"\' bash $file`
+		}
+		next if($add eq '');
+		$iuse .= ' ' if($iuse ne '');
+		$iuse .= $add
+	}
+
+	# Now we parse all the profiles
+	# (in /etc/make.profile, @repos, and in /etc/portage/profile)
+	# using the recursive function &readprofile.
+
+	%{$useflags} = ();
+	my $have_profile = '';
+	for my $profile (File::Spec->catdir($configroot, 'etc', 'make.profile'),
+		File::Spec->catdir($configroot, 'etc', 'portage', 'make.profile')) {
+		next unless(-d $profile);
+		$have_profile = 1;
+		&readprofile(1, $profile, $useflags);
+		last
+	}
+	&fatal("cannot find directory ${configroot}/etc\{,/portage\}/make.profile")
+		unless($have_profile);
+	for my $repo (@repos) {
+		&readprofile('', File::Spec->catdir($repo, 'profiles'), $useflags)
+	}
+	&readprofile('',
+		File::Spec->catdir($configroot, 'etc', 'portage', 'profile'),
+		$useflags);
+	&useset_make_conf($iuse, $useflags)
+}
+
+
+# Now we interpret the value of the USE variable in /etc/portage/make.conf:
+sub useset_make_conf {
+	($_, my $useflags) = @_;
+	(m{^\s*$}) and
+		&fatal('No USE variable specified in /etc/portage/make.conf or /etc/make.conf');
+	for(split()) {
+		chomp();
+		s{^\s*([^\s]*).*$}{$1};
+		if(m{^\-(.*)}) {
+			&useset($useflags, $1, -1)
+		} else {
+			&useset($useflags, $_, 1)
+		}
+	}
+}
+
+sub printflags { my($useflags) = @_;
+	for(sort(keys(%$useflags))) {
+		my $entry = &entry($useflags, $_);
+		print("$_: ", &entry2text($entry), "\n")
+			or &fatal("write error")
+	}
+}
+
+sub saveflags {
+	my ($useflags, $filename) = @_;
+	open(my $out, '>', $filename) or &fatal("cannot write to $filename");
+	select($out);
+	&printflags($useflags);
+	close($out);
+	select(STDOUT)
+}
+
+sub loadflags {
+	my ($useflags, $filename) = @_;
+	%{$useflags} = ();
+	open(my $in, '<', $filename) or &fatal("cannot read $filename");
+	while(<$in>) {
+		chomp();
+		s{^\s*}{};
+		s{\s*$}{};
+		s{^#.*}{};
+		if($_ ne '') {
+			m{^([^\s:]*)\s*[^:]*\s*(.*)};
+			if($1 ne '') {
+				my $string = $2; # make sure to avoid side effects
+				my $entry = &entry($useflags, $1);
+				&text2entry($entry, $string);
+			}
+		}
+	}
+	close($in)
+}
+
+sub compareflags {
+	my ($oldflags, $newflags);
+	if($reverse) {
+		($newflags, $oldflags) = @_
+	} else {
+		($oldflags, $newflags) = @_
+	}
+	my @array = (keys(%$oldflags));
+	push(@array, (keys(%$newflags)));
+	my $previous = '#';
+	for(sort(@array)) {
+		if($_ ne $previous) {
+			$previous = $_;  # make sure to avoid side effects
+			my $old = 'NONE';
+			my $new = $old;
+			$old = &entry2text(&entry($oldflags, $previous))
+				if(exists(${$oldflags}{$previous}));
+			$new = &entry2text(&entry($newflags, $previous))
+				if(exists(${$newflags}{$previous}));
+			print("$previous: $old -> $new\n") if($old ne $new)
+		}
+	}
+}
+
+#
+# Now the main code
+#
+
+# Parse the options
+
+Getopt::Long::Configure(qw(gnu_getopt));
+Getopt::Long::GetOptions(
+	'help|h', sub { &pod2usage(0) },
+	'man|?', sub { &pod2usage(-verbose => 2, -exit => 0) },
+	'version|V', \&version,
+	'brief!', \$brief,
+	'b', \$brief,
+	'verbose!', \$verbose,
+	'v', \$verbose,
+	'reverse!', \$reverse,
+	'r', \$reverse,
+	'file|path|savepath|save|f|s|p=s', \$savepath,
+) or &pod2usage(1);
+&pod2usage(2) unless(@ARGV);
+my $action = $ARGV[0];
+
+# Interpret the options
+
+$verbose and $brief = '';
+
+
+my %useflags = ();
+keys(%useflags) = 2000;
+
+my %oldflags = ();
+keys(%oldflags) = 2000;
+
+if($action =~ m{^save$}i || $action =~ m{^store}i) {
+	my $filename = $savepath;
+	if(scalar(@ARGV) == 2) {
+		$filename = $ARGV[1]
+	} elsif(scalar(@ARGV) != 1) {
+		&pod2usage('too many arguments for "save"')
+	}
+	&getflags(\%useflags);
+	&saveflags(\%useflags, $filename)
+} elsif($action =~ m{^echo$}i || $action =~ m{^print$}i) {
+	&getflags(\%useflags);
+	&printflags(\%useflags)
+} elsif($action =~ m{^cat$}i || $action =~ m{^old$}i || $action =~ m{^saved$}i) {
+	my $filename = $savepath;
+	if(scalar(@ARGV) == 2) {
+		$filename = $ARGV[1]
+	} elsif(scalar(@ARGV) != 1) {
+		&pod2usage('too many arguments for "cat"')
+	}
+	&loadflags(\%useflags, $filename);
+	&printflags(\%useflags)
+} elsif($action =~ m{^diff\D*\d}i || $action =~ m{^comp\D*\d}i) {
+	&loadflags(\%useflags, "/gentoo32$savepath");
+	&loadflags(\%oldflags, "/gentoo64$savepath");
+	&compareflags(\%useflags, \%oldflags)
+} elsif($action =~ m{^diff$}i || $action =~ m{^comp$}i) {
+	if(scalar(@ARGV) == 3) {
+		&loadflags(\%useflags, $ARGV[1]);
+		&loadflags(\%oldflags, $ARGV[2]);
+	} elsif(scalar(@ARGV) == 2) {
+		&loadflags(\%useflags, $ARGV[1]);
+		&loadflags(\%oldflags, $savepath);
+	} elsif(scalar(@ARGV) == 1) {
+		&loadflags(\%useflags, $savepath);
+		&getflags(\%oldflags);
+	} else {
+		&pod2usage('too many arguments for "diff"')
+	}
+	&compareflags(\%useflags, \%oldflags)
+} elsif($action =~ m{^[hH]}) {
+	&pod2usage(0)
+} elsif($action =~ m{^[mM\?]}) {
+	&pod2usage(-verbose => 2, -exit => 0)
+} else {
+	&pod2usage("unknown action: $action")
+}
