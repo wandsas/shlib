@@ -1,7 +1,7 @@
 #!/bin/sh
 
 . /home/wandsas/lib/stdout-log.sh
-. /home/wandsas/.config/bashrc.d/gpg-agent.sh
+. /home/wandsas/.config/bashrc.d/50-gpg-agent.sh
 
 echo UPDATESTARTUPTTY | gpg-connect-agent >/dev/null 2>&1
 [ $? != 0 ] && warn "Initialization of gpg-agent failed." || msg "gpg-agent initialized."
