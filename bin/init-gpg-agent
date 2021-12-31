@@ -4,14 +4,10 @@
 . /home/wandsas/.config/bashrc.d/50-gpg-agent.sh
 
 echo UPDATESTARTUPTTY | gpg-connect-agent >/dev/null 2>&1
-[ $? != 0 ] && warn "Initialization of gpg-agent failed." || msg "gpg-agent initialized."
+[ $? != 0 ] && warn "Initialization of gpg-agent failed."
 
 if command -v xhost >/dev/null 2>&1; then
     # Allow remote X11 connections for container.
     xhost + >/dev/null 2>&1
-    if [ $? != 0 ]; then
-        warn "Failed to allow X11 remote connections."
-    else
-        msg "Allow remote X11 connections."
-    fi
+    [ $? != 0 ] && warn "Failed to allow X11 remote connections."
 fi

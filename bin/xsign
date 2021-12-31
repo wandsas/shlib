@@ -2,7 +2,7 @@
 
 msg () { printf "\033[1m\033[90m=>\033[m $@\n"; }
 
-REPO=$HOME/void-packages/hostdir/binpkgs
+REPO=$HOME/.GIT/void/void-packages/hostdir/binpkgs
 KEY=$HOME/.ssh/id_void.pem
 export XBPS_PASSPHRASE=foobar
 
@@ -10,5 +10,7 @@ export XBPS_PASSPHRASE=foobar
 xbps-rindex --sign-pkg --privkey $KEY $REPO/*.xbps
 
 # Initialize repository metadata
-# xbps-rindex --sign --signedby "wandsas" --privkey ~/.ssh/id_void.pem ~/void-packages/hostdir/binpkgs
+# xbps-rindex --sign --signedby "wandsas" \
+#   --privkey ~/.ssh/id_void.pem 
+#   ~/.GIT/void/void-packages/hostdir/binpkgs
 
